@@ -1,6 +1,5 @@
 require_relative '../config/environment'
 
 cli=CommandLineInterface.new
-cli.login 
-cli.booking_system
-
+# cli.booking_system
+cli.run

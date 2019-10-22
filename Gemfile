@@ -2,6 +2,16 @@
 source "https://rubygems.org"
 
 gem "sinatra-activerecord"
-gem "sqlite3", '~> 1.3.6'
+gem "activerecord", '~>5.2.3'
+gem "sqlite3", '~> 1.4.0'
 gem "pry"
+gem "faker"
 gem "require_all"
+gem "rake"
+gem "catpix"
+gem "tty-prompt"
+gem "colorize"
+
+
+
+gem "update", "~> 0.9.9"
