@@ -24,46 +24,44 @@ class CommandLineInterface
              elsif selection == 3
                 update_delete_user
              else 
-                exit
+                
              end
           
      end   
      
-     #create a userin 
+     #create a user
      def user_login
         prompt = TTY::Prompt.new
         full_name =prompt.ask("Please enter your full name?")
         origin = prompt.ask("Please enter your origin city?")
         user_email = prompt.ask("Please enter your email?")
         @user_name = User.create(name: "#{full_name}",city: "#{origin}",email:"#{user_email}")
-        # user_id_show=prompt.select("Your user ID:",@user_name.id)
+        binding.pry
     end
 
 
     #Select all citys
-    def select_all_city
-        prompt = TTY::Prompt.new
-        prompt.ask("Where would you like to go")
-        @locations = Hotel.all.map {|hotel| hotel.city}.join(',')
-        locatation_selection = prompt.select("Choose a right city for you?",@locations.split(','))
-        @location = Hotel.find_by(city: locatation_selection)
-        in_date=prompt.ask("Choose your check in date?")
-        out_date=prompt.ask("Choese your check out date?")
-        @u_name = User.find_by(name: @user_name)
-        @location.bookings << Booking.create(reservation_start_date: in_date,reservation_end_date: out_date,user_id: @user_name.id,hotel_id: @location.id)
-        sleep(2)
-        #.all
-        prompt.ask("Thank you for choosing us #{@location.bookings.last.id } ,you will receive an email confirmation")
-        run 
+        def select_all_city
+            prompt = TTY::Prompt.new
+            prompt.ask("Where would you like to go")
+            @locations = Hotel.all.map {|hotel| hotel.city}.join(',')
+            locatation_selection = prompt.select("Choose a right city for you?",@locations.split(','))
+            @location = Hotel.find_by(city: locatation_selection)
+            in_date=prompt.ask("Choose your check in date?")
+            out_date=prompt.ask("Choese your check out date?")
+            @u_name = User.find_by(name: @user_name)
+            @location.bookings << Booking.create(reservation_start_date: in_date,reservation_end_date: out_date,user_id: @user_name.id,hotel_id: @location.id)
+            sleep(2)
+            prompt.ask("Thank you for choosing us this is your BookingRefernce-#{@location.bookings.last.id } ,you will receive an email confirmation")
+            run 
 
     end
 
 
     def  check_hotel_prices
-   
         prompt = TTY::Prompt.new
         Hotel.all.pluck(:hotel_name, :room_price).each {|x| puts "- #{x[0]} - $#{x[1]}"}
-        sleep(3)
+        sleep(4)
         run    
     end
     
@@ -75,7 +73,6 @@ class CommandLineInterface
             { name: 'Delete a booking', value: 2 },
             { name: 'Return Back', value: 3 }])
             
-
 
             if selection == 1
                 update_booking_destination
@@ -89,14 +86,12 @@ class CommandLineInterface
         end
 
             def update_booking_destination
-                puts "update"
                 prompt = TTY::Prompt.new
-                id_check=prompt.mask("What is your Booking",required: true).to_i
-                if Booking.exists?(id_check) 
-                   
-                end
-
-
+                id_check=prompt.ask("What is your Booking Reference Number")
+                start_date=prompt.ask("Change Booking  Date")
+                end_date=prompt.ask("Change Returning Date")
+                book= Booking.find_by(id:id_check)
+                book.update(reservation_start_date:start_date,reservation_end_date: end_date)
             end
             
             
